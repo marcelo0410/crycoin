@@ -1,7 +1,7 @@
-import CoinGecko from 'coingecko-api';
+import axios from 'axios';
 
-const CoinGeckoClient = new CoinGecko();
+const url = 'https://api.coingecko.com/api/v3';
 
-export const func = async() => {
-    let data = await CoinGeckoClient.coins.all();
-}
+//https://api.coingecko.com/api/v3/coins/markets?vs_currency=aud&order=market_cap_desc&per_page=100&page=1&sparkline=false
+
+export const fetchCoins = () => axios.get(`${url}/coins/markets?vs_currency=aud&order=market_cap_desc&per_page=100&page=1&sparkline=false`);
