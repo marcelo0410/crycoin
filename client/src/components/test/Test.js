@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { fetchCoins } from '../../api/coingecko';
+import { fetchCoins } from '../../api/CoinGeckoAPI';
 
 
 const Test = () => {
