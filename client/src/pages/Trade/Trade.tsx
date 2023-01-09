@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 
 import { fetchCoins } from '../../api/CoinGeckoAPI';
+import { createTradeDetail } from '../../api/index';
 
 const Trade = () => {
 
@@ -62,6 +63,7 @@ const Trade = () => {
         console.log('userprice: ', userAud);
         console.log(', quantity: ', convertedCoin);
         console.log('coin:', selectedCoin);
+        createTradeDetail({userId: 1, coinId: selectedCoin.id, cost: userAud, coinPrice: selectedCoin.current_price, coinQuan: convertedCoin});
     }
 
   return (
