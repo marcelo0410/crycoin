@@ -4,6 +4,7 @@ import Test from './components/test/Test';
 import Test2 from './components/test/Test2';
 import Home from './pages/Home/Home.tsx';
 import Trade from './pages/Trade/Trade.tsx';
+import TradeHistory from './pages/TradeHistory/TradeHistory.tsx';
 
 function App() {
   return (
@@ -12,6 +13,7 @@ function App() {
       {/* <Test></Test> */}
       {/* <Home></Home> */}
       <Trade></Trade>
+      <TradeHistory></TradeHistory>
     </div>
   );
 }

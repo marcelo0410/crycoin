@@ -40,7 +40,7 @@ const Trade = () => {
     const [selectedCoin, setSelectedCoin] = useState<CoinResult>({} as CoinResult);
 
     useEffect(() => {
-        fetchCoins().then(data => {setCoinData(data.data); console.log(data); filterCoin(data.data, 'bitcoin')});
+        fetchCoins().then(data => {setCoinData(data.data); console.log(data); filterCoin(data.data, 'tether')});
         
     }, [])
 
@@ -60,10 +60,8 @@ const Trade = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        console.log('userprice: ', userAud);
-        console.log(', quantity: ', convertedCoin);
-        console.log('coin:', selectedCoin);
-        createTradeDetail({userId: 1, coinId: selectedCoin.id, cost: userAud, coinPrice: selectedCoin.current_price, coinQuan: convertedCoin});
+        // createTradeDetail({userId: 1, coinId: selectedCoin.id, cost: userAud, coinPrice: selectedCoin.current_price, coinQuan: convertedCoin});
+        createTradeDetail({userId: 1, coinId: 'tether', cost: userAud, coinPrice: selectedCoin.current_price, coinQuan: convertedCoin});
     }
 
   return (

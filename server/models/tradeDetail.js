@@ -1,6 +1,11 @@
 import mongoose from "mongoose";
+import {uuid} from 'uuidv4'
 
-const postSchema = mongoose.Schema({
+const tradeSchema = mongoose.Schema({
+    tradeId: {
+        type: String,
+        default: () => uuid()
+    },
     userId: Number,
     coinId: String,
     cost: Number,
@@ -8,10 +13,10 @@ const postSchema = mongoose.Schema({
     coinQuan: Number,
     tradedAt: {
         type: Date,
-        default: new Date()
+        default: Date.now
     }
 });
 
-const TradeDetail = mongoose.model('TradeDetail', postSchema);
+const TradeDetail = mongoose.model('TradeDetail', tradeSchema);
 
 export default TradeDetail;
