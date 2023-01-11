@@ -1,18 +1,110 @@
 import React, {useEffect, useState} from 'react'
 import { fetchTradeDetail } from '../../api'
 
-const TradeHistory = () => {
+import { Space, Table, Tag } from 'antd';
+import type { ColumnsType } from 'antd/es/table';
+
+interface DataType {
+  key: string;
+  name: string;
+  age: number;
+  address: string;
+  tags: string[];
+}
+
+interface TradeRecord {
+    tradeId: number,
+    userId: number,
+    coinId: string,
+    cost: number,
+    coinPrice: number,
+    coinQuan: number,
+    tradedAt: Date
+}
+
+const columns: ColumnsType<TradeRecord> = [
+  {
+    title: 'Name',
+    dataIndex: 'coinId',
+    key: 'name',
+    render: (text) => <a>{text}</a>,
+  },
+  {
+    title: 'Cost',
+    dataIndex: 'cost',
+    key: 'cost',
+	render: (aud) => <>${aud}</>
+  },
+  {
+    title: 'Purchase price',
+    dataIndex: 'coinPrice',
+    key: 'coinPrice',
+  },
+//   {
+//     title: 'Tags',
+//     key: 'tags',
+//     dataIndex: 'tags',
+//     render: (_, { tags }) => (
+//       <>
+//         {tags.map((tag) => {
+//           let color = tag.length > 5 ? 'geekblue' : 'green';
+//           if (tag === 'loser') {
+//             color = 'volcano';
+//           }
+//           return (
+//             <Tag color={color} key={tag}>
+//               {tag.toUpperCase()}
+//             </Tag>
+//           );
+//         })}
+//       </>
+//     ),
+//   },
+  {
+    title: 'Quantity',
+    dataIndex: 'coinQuan',
+    key: 'coinQuan',
+  },
+  {
+    title: 'Action',
+    key: 'action',
+    render: (_, record) => (
+		<a>Detail</a>
+    //   <Space size="middle">
+    //     <a>Invite {record.userId}</a>
+    //     <a>Delete</a>
+    //   </Space>
+    ),
+  },
+];
+
+const data: DataType[] = [
+  {
+    key: '1',
+    name: 'John Brown',
+    age: 32,
+    address: 'New York No. 1 Lake Park',
+    tags: ['nice', 'developer'],
+  },
+  {
+    key: '2',
+    name: 'Jim Green',
+    age: 42,
+    address: 'London No. 1 Lake Park',
+    tags: ['loser'],
+  },
+  {
+    key: '3',
+    name: 'Joe Black',
+    age: 32,
+    address: 'Sidney No. 1 Lake Park',
+    tags: ['cool', 'teacher'],
+  },
+];
 
 
-	interface TradeRecord {
-		tradeId: number,
-		userId: number,
-		coinId: string,
-		cost: number,
-		coinPrice: number,
-		coinQuan: number,
-		tradedAt: Date
-	}
+const TradeHistory: React.FC = () => {
+	const [tradeHistoryData, setTradeHistoryData] = useState<TradeRecord[]>([]);
 
 	useEffect( () => {
 	  const fetchData = async () => {
@@ -20,82 +112,14 @@ const TradeHistory = () => {
 		console.log(result.data);
 		setTradeHistoryData(result.data);
 	  };
-  
 	  fetchData();
 	}, [])
 
-	const [tradeHistoryData, setTradeHistoryData] = useState<TradeRecord[]>([]);
-	
-
-
-  return (
-    <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
-        <h1>Trade History</h1>
-        <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
-            <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
-                <tr>
-                    <th scope="col" className="p-4">
-                        <div className="flex items-center">
-                            <input id="checkbox-all-search" type="checkbox" className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"/>
-                            <label htmlFor="checkbox-all-search" className="sr-only">checkbox</label>
-                        </div>
-                    </th>
-                    <th scope="col" className="px-6 py-3">
-                        record
-                    </th>
-                    {/* <th scope="col" className="px-6 py-3">
-                        Photo
-                    </th> */}
-                    <th scope="col" className="px-6 py-3">
-                        Price
-                    </th>
-                    <th scope="col" className="px-6 py-3">
-                        High_24hour
-                    </th>
-                    <th scope="col" className="px-6 py-3">
-                        Low_24hour
-                    </th>
-                    <th scope="col" className="px-6 py-3">
-                        Action
-                    </th>
-                </tr>
-            </thead>
-            <tbody>
-                {!(tradeHistoryData.length) ? <tr><td>No record data available</td></tr> : tradeHistoryData.map(record => (
-                        <tr key={record.tradeId} className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
-                            <td className="w-4 p-4">
-                                <div className="flex items-center">
-                                    <input id="checkbox-table-search-1" type="checkbox" className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"/>
-                                    <label htmlFor="checkbox-table-search-1" className="sr-only">checkbox</label>
-                                </div>
-                            </td>
-                            <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-								{record.coinId}
-                            </th>
-                            {/* <td className="px-6 py-4">
-                                <img 
-                                src={record.image}
-                                alt={record.name}
-                                style={{height: '20px', width: '20px', paddingRight: '20px'}}/>
-                            </td> */}
-                            <td className="px-6 py-4">
-                                {record.cost}
-                            </td>
-                            <td className="px-6 py-4">
-                                {record.coinPrice}
-                            </td>
-                            <td className="px-6 py-4">
-                                {record.coinQuan}
-                            </td>
-                            <td className="px-6 py-4">
-                                <a href="#" className="font-medium text-blue-600 dark:text-blue-500 hover:underline">Trade</a>
-                            </td> 
-                        </tr>
-                ))}
-            </tbody>
-        </table>
-    </div>
-  )
+	return (
+		<div>
+			{!(tradeHistoryData.length) ? <tr><td>No record data available</td></tr> : <Table columns={columns} dataSource={tradeHistoryData} />}
+		</div>
+	)
 }
 
 export default TradeHistory
