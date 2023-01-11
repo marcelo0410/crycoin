@@ -39,6 +39,7 @@ const columns: ColumnsType<TradeRecord> = [
     title: 'Purchase price',
     dataIndex: 'coinPrice',
     key: 'coinPrice',
+	width: 250
   },
 //   {
 //     title: 'Tags',
@@ -64,6 +65,14 @@ const columns: ColumnsType<TradeRecord> = [
     title: 'Quantity',
     dataIndex: 'coinQuan',
     key: 'coinQuan',
+	width: 250
+  },
+  {
+	title: 'Traded at',
+	dataIndex: 'tradedAt',
+	key: 'tradedAt',
+	width: 250,
+	render: ((date:string) => getFullDate(date)) 
   },
   {
     title: 'Action',
@@ -101,6 +110,11 @@ const data: DataType[] = [
     tags: ['cool', 'teacher'],
   },
 ];
+
+const getFullDate = (date: string): string => {
+	const dateAndTime = date.split('T');
+	return dateAndTime[0].split('-').join('-')+ ' ' + dateAndTime[1].split('Z')[0];
+};
 
 
 const TradeHistory: React.FC = () => {
