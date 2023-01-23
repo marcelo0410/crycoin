@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { fetchCoins } from '../../api/CoinGeckoAPI';
-import { Table } from 'antd';
+import { Table, Space } from 'antd';
 import type { ColumnsType, TableProps } from 'antd/es/table';
 import { CoinResult } from '@/common/interfaces/interface';
 import { getNumberFormat } from '../../common/util/calculation';
@@ -16,11 +16,12 @@ const columns: ColumnsType<CoinResult> = [
     render: (text, record) => {
         return (
             <div style={{display:'flex', maxWidth:"50%"}}>
-                <img style={{maxHeight:"30px", paddingRight:"12px", paddingTop:"10px"}} src={record.image} alt={record.name}></img>
+                <img style={{maxHeight:"28px", paddingRight:"12px", marginTop:"15px"}} src={record.image} alt={record.name}></img>
                 <h3>{record.name}</h3>
             </div>
         )
-    }
+    },
+    width: '15%',
   },
   {
     title: 'Price',
@@ -29,6 +30,12 @@ const columns: ColumnsType<CoinResult> = [
       compare: (a, b) => a.current_price - b.current_price,
     //   multiple: 3,
     },
+    render: (text, record) => {
+      return (
+        <div>${text}</div>
+      )
+    },
+    width: '15%',
   },
   {
     title: 'Price Change',
@@ -44,7 +51,8 @@ const columns: ColumnsType<CoinResult> = [
             },
             children: <div>{text}%</div>
         }
-    }
+    },
+    width: '15%',
   },
   {
     title: 'Market Cap',
@@ -57,8 +65,20 @@ const columns: ColumnsType<CoinResult> = [
         return (
             <div>{getNumberFormat(record.market_cap)}</div>
         )
-    }
+    },
+    width: '10%',
   },
+  {
+    title: '',
+    dataIndex: '',
+    render: (_, record) => (
+      <Space size="middle" >
+        <a style={{color:"orange"}}>Detail</a>
+        <a style={{color:"orange"}}>Trade</a>
+      </Space>
+    ),
+    width: '20%',
+  }
 ];
 
 
