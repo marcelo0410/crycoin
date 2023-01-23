@@ -5,6 +5,7 @@ import type { MenuTheme } from 'antd';
 import { Breadcrumb, Layout, Menu, theme } from 'antd';
 import './style.css';
 import TradeHistory from '../TradeHistory/TradeHistory';
+import Trade from '../Trade/Trade';
 
 const { Header, Content, Footer, Sider } = Layout;
 
@@ -69,9 +70,9 @@ const Dashboard: React.FC = () => {
             </Header>
             <Content style={{ height: "100vh" }}>
                 <Breadcrumb style={{ margin: '16px 5px' }}>
-                <Breadcrumb.Item>Home</Breadcrumb.Item>
-                <Breadcrumb.Item>List</Breadcrumb.Item>
-                <Breadcrumb.Item>App</Breadcrumb.Item>
+                  <Breadcrumb.Item>Home</Breadcrumb.Item>
+                  <Breadcrumb.Item>List</Breadcrumb.Item>
+                  <Breadcrumb.Item>App</Breadcrumb.Item>
                 </Breadcrumb>
                 <Layout style={{ padding: '24px 0', background: colorBgContainer }}>
                 <Sider style={{ background: colorBgContainer}} width={250} trigger={null} collapsible={false}>
@@ -86,6 +87,7 @@ const Dashboard: React.FC = () => {
                 </Sider>
                 <Content style={{ padding: '0 24px', minHeight: 280 }}>
                     <TradeHistory></TradeHistory>
+                    <Trade></Trade>
                 </Content>
                 </Layout>
             </Content>
