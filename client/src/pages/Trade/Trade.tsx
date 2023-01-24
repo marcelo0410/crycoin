@@ -8,20 +8,7 @@ import { CoinResult } from '@/common/interfaces/interface';
 
 const { Option } = Select;
 
-const selectBefore = (
-  <Select defaultValue="add" style={{ width: 60 }}>
-    <Option value="add">+</Option>
-    <Option value="minus">-</Option>
-  </Select>
-);
-const selectAfter = (
-  <Select defaultValue="USD" style={{ width: 60 }}>
-    <Option value="USD">$</Option>
-    <Option value="EUR">€</Option>
-    <Option value="GBP">£</Option>
-    <Option value="CNY">¥</Option>
-  </Select>
-);
+
 
 
 
@@ -36,6 +23,43 @@ const Trade: React.FC = () => {
         fetchCoins().then(data => {setCoinData(data.data); console.log(data); filterCoin(data.data, 'tether')});
         
     }, [])
+
+    const handleSelectCoin = (e: string) => {
+      filterCoin(coinData, e);
+    }
+
+    const selectBefore = (
+      <Select defaultValue="add" style={{ width: 60 }}>
+        <Option value="add">+</Option>
+        <Option value="minus">-</Option>
+      </Select>
+    );
+    const selectAfter = (
+      <Select defaultValue="USD" style={{ width: 60 }}>
+        <Option value="USD">$</Option>
+        <Option value="EUR">€</Option>
+        <Option value="GBP">£</Option>
+        <Option value="CNY">¥</Option>
+      </Select>
+    );
+    
+    
+    
+    
+    const mapCoinForSelectAfter = (fetchedCoinData: CoinResult[]) => {
+      return (
+        <Select defaultValue="Select" style={{ width: 160, height: 40, paddingTop:"5px", paddingLeft:"20px", fontSize:"10px" }} onChange={handleSelectCoin}>
+          {fetchedCoinData.map((coin) => (
+            <Option value={coin.name} style={{paddingTop:"5px"}}>
+              <div style={{display:"flex"}}>
+                <h3 style={{fontSize:"10px", paddingRight:"5px"}}>{coin.name}</h3>
+                <img src={coin.image} alt={coin.name} style={{maxWidth:"25px", maxHeight:"25px", paddingTop:"5px"}}/>
+              </div>
+            </Option>
+          ))}
+        </Select>
+      );
+    };
 
     const filterCoin = (data: Array<CoinResult>, targetCoin: string): void => {
         let selectedC = data.filter(item => {
@@ -59,12 +83,12 @@ const Trade: React.FC = () => {
 
   return (
     <Space direction="vertical">
-        <InputNumber addonBefore="AUD$" defaultValue={selectedCoin.current_price} size={"large"} disabled={true}/>
-        <InputNumber addonBefore={selectBefore} addonAfter={selectAfter} defaultValue={100} />
+        <InputNumber addonBefore="AUD$" defaultValue={0} value={selectedCoin.current_price} addonAfter={mapCoinForSelectAfter(coinData)} size={"large"} readOnly={true}/>
+        <InputNumber addonBefore="AUD$" addonAfter={mapCoinForSelectAfter(coinData)} defaultValue={100} size={"large"}/>
         <InputNumber addonAfter={<SettingOutlined />} defaultValue={100} />
         <InputNumber
-        addonBefore={<Cascader placeholder="cascader" style={{ width: 150 }} />}
-        defaultValue={100}
+          addonBefore={<Cascader placeholder="cascader" style={{ width: 150 }} />}
+          defaultValue={100}
         />
         <div>{selectedCoin.current_price}</div>
   </Space>
