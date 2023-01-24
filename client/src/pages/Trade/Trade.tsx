@@ -5,11 +5,25 @@ import { Cascader, InputNumber, Select, Space } from 'antd';
 import { fetchCoins } from '../../api/CoinGeckoAPI';
 import { createTradeDetail } from '../../api/index';
 import { CoinResult } from '@/common/interfaces/interface';
+import { DefaultOptionType } from 'antd/es/select';
 
 const { Option } = Select;
 
 
-
+const selectBefore = (
+  <Select defaultValue="add" style={{ width: 60 }}>
+    <Option value="add">+</Option>
+    <Option value="minus">-</Option>
+  </Select>
+);
+const selectAfter = (
+  <Select defaultValue="USD" style={{ width: 60 }}>
+    <Option value="USD">$</Option>
+    <Option value="EUR">€</Option>
+    <Option value="GBP">£</Option>
+    <Option value="CNY">¥</Option>
+  </Select>
+);
 
 
 const Trade: React.FC = () => {
@@ -20,37 +34,25 @@ const Trade: React.FC = () => {
     const [selectedCoin, setSelectedCoin] = useState<CoinResult>({} as CoinResult);
 
     useEffect(() => {
-        fetchCoins().then(data => {setCoinData(data.data); console.log(data); filterCoin(data.data, 'tether')});
+        fetchCoins().then(data => {setCoinData(data.data)});
         
     }, [])
 
-    const handleSelectCoin = (e: string) => {
-      filterCoin(coinData, e);
+    const handleSelectCoin = (value: string, option: DefaultOptionType | DefaultOptionType[]) => {
+      filterCoin(coinData, value);
+      console.log(selectedCoin);
     }
 
-    const selectBefore = (
-      <Select defaultValue="add" style={{ width: 60 }}>
-        <Option value="add">+</Option>
-        <Option value="minus">-</Option>
-      </Select>
-    );
-    const selectAfter = (
-      <Select defaultValue="USD" style={{ width: 60 }}>
-        <Option value="USD">$</Option>
-        <Option value="EUR">€</Option>
-        <Option value="GBP">£</Option>
-        <Option value="CNY">¥</Option>
-      </Select>
-    );
+
     
     
     
     
     const mapCoinForSelectAfter = (fetchedCoinData: CoinResult[]) => {
       return (
-        <Select defaultValue="Select" style={{ width: 160, height: 40, paddingTop:"5px", paddingLeft:"20px", fontSize:"10px" }} onChange={handleSelectCoin}>
+        <Select defaultValue="Select" style={{ width: 140, height: 40, paddingTop:"5px", paddingLeft:"20px", fontSize:"10px" }} onChange={(value, option) => handleSelectCoin(value, option)}>
           {fetchedCoinData.map((coin) => (
-            <Option value={coin.name} style={{paddingTop:"5px"}}>
+            <Option value={coin.id} style={{paddingTop:"5px"}} key={coin.id}>
               <div style={{display:"flex"}}>
                 <h3 style={{fontSize:"10px", paddingRight:"5px"}}>{coin.name}</h3>
                 <img src={coin.image} alt={coin.name} style={{maxWidth:"25px", maxHeight:"25px", paddingTop:"5px"}}/>
@@ -83,14 +85,15 @@ const Trade: React.FC = () => {
 
   return (
     <Space direction="vertical">
-        <InputNumber addonBefore="AUD$" defaultValue={0} value={selectedCoin.current_price} addonAfter={mapCoinForSelectAfter(coinData)} size={"large"} readOnly={true}/>
-        <InputNumber addonBefore="AUD$" addonAfter={mapCoinForSelectAfter(coinData)} defaultValue={100} size={"large"}/>
-        <InputNumber addonAfter={<SettingOutlined />} defaultValue={100} />
+        <InputNumber addonBefore="Price $" defaultValue={0} value={selectedCoin.current_price} addonAfter={mapCoinForSelectAfter(coinData)} size={"large"} readOnly={true}/>
+        <InputNumber addonBefore="Amount" defaultValue={100} size={"large"} min={0} onChange={(value: number) => calculateCoinQuan(value)}/>
+        <InputNumber addonBefore="Total" defaultValue={0} value={0} size={"large"} readOnly={true}/>
         <InputNumber
           addonBefore={<Cascader placeholder="cascader" style={{ width: 150 }} />}
           defaultValue={100}
         />
         <div>{selectedCoin.current_price}</div>
+        <div>{selectBefore}</div>
   </Space>
   )
 }
